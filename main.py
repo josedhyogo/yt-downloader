@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os,sys,re,subprocess
-from downloader import baixarAudio,baixarVideo,respostaDownload
+from downloader import baixarAudio,baixarVideo,respostaDownload,contar_midias
 from escolher_pasta_destiono import pastaDestino
 
 # ---------------- VERIFICAÇÃO ----------------
@@ -36,17 +36,22 @@ def main():
     # ---------------- MENU ----------------
     print("\033[1;31m---------------YT DOWNLOADER---------------\033[m")
     url = input("\033[0;33mDigite a URL da musica/playlist: ").strip()
+
     opcao = str(input("""Escolha sua opcao:\033[m
     \033[1;36m[ 1 ] - Baixar Video (MP4)
     [ 2 ] - Baixar Áudio (MP3)\033[m
     \033[0;33mDigite aqui:\033[m """)).strip()
-
+    
+    total = contar_midias(url)
+    print("Total de músicas/videos encontrados: ",total)
+    pasta = pastaDestino()
+    
     match opcao:
         case "1":
             processo = baixarVideo(url)
-            respostaDownload(processo)
+            respostaDownload(processo,pasta)
         case "2":
-            processo = baixarAudio(url)
+            processo = baixarAudio(url,pasta)
             respostaDownload(processo)
         case _:
             raise ValueError("Opção invalida.(Escolha 1 ou 2).")
